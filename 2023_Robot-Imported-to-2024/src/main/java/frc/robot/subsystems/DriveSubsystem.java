@@ -4,12 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -74,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from 180 to 180
    */
   public double getHeading(){
-    return Math.IEEEremainder(gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return Math.IEEEremainder(gyro.getAngle(IMUAxis.kZ), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
     /**
@@ -83,7 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate(){
-    return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   public void manualDrive(double move, double turn) {
@@ -101,7 +100,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveStraight(double move, double angleSetpoint){
-    turningValue = (angleSetpoint - gyro.getAngle()) * .01;
+    turningValue = (angleSetpoint - gyro.getAngle(IMUAxis.kZ)) * .01;
      //Invert the direction of the turn if we are going backwards
     turningValue = Math.copySign(turningValue, move);
     drive.arcadeDrive(move, turningValue);
@@ -115,8 +114,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("gyro Angle",Math.IEEEremainder(gyro.getAngle(), 360));
+    // This method will be called once Pper scheduler run
+    SmartDashboard.putNumber("gyro Angle",Math.IEEEremainder(gyro.getAngle(IMUAxis.kZ), 360));
 /*     SmartDashboard.putNumber("turningValue",turningValue);
     SmartDashboard.putNumber("Left Master", leftMaster.getMotorOutputPercent());
     SmartDashboard.putNumber("Left Slave", leftSlave.getMotorOutputPercent());
