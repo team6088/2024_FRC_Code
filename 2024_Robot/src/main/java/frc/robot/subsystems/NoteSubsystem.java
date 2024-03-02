@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.NoteConstants;
 
@@ -91,5 +92,10 @@ public class NoteSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  SmartDashboard.putNumber("Left Encoder", leftLiftMotor.getPosition().getValueAsDouble());
+  SmartDashboard.putNumber("Right Encoder", rightLiftMotor.getPosition().getValueAsDouble());
+  SmartDashboard.putNumber("Left Lift Output", leftLiftMotor.get());  
+  SmartDashboard.putNumber("Right Lift Output", rightLiftMotor.get());    
+  SmartDashboard.putBoolean("Lower Switch Value", bottomSwitch.get());  
   }
 }
