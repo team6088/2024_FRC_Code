@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -27,7 +28,6 @@ public class NoteSubsystem extends SubsystemBase {
   /** Creates a new NoteSubsystem. */
   public NoteSubsystem() {
     rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
-    
   }
 
   public void manualRaiseLift(){
@@ -41,6 +41,10 @@ public class NoteSubsystem extends SubsystemBase {
     else{
       leftLiftMotor.set(0);
     }
+  }
+
+  public void holdLiftPosition(){
+    leftLiftMotor.setControl(new PositionDutyCycle(1000));
   }
 
   public void manualTiltUp(){
