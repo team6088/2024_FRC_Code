@@ -139,4 +139,15 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final class NoteConstants {
+    public static final int leftLiftMotorID = 8;
+    public static final int rightLiftMotorID = 9;
+    public static final int bottomSwitch = 0;
+    public static final int rightShooterID = 1;
+    public static final int leftShooterID = 2;   
+    public static final int kickerMotorID = 3;
+    public static final int tiltMotorID = 4; 
+    
+  }
 }

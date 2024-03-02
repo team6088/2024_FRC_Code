@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -13,23 +15,23 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.time.Instant;
-import java.util.List;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.NoteSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,11 +42,30 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final NoteSubsystem noteSubsystem = new NoteSubsystem();
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Trigger buttonA = new JoystickButton(m_driverController, 1),
+    buttonB = new JoystickButton(m_driverController,2),
+    buttonX = new JoystickButton(m_driverController,3),
+    buttonY = new JoystickButton(m_driverController,4),
+    buttonLeftBumper = new JoystickButton(m_driverController,5),
+    buttonRightBumper = new JoystickButton(m_driverController,6),
+    buttonBack = new JoystickButton(m_driverController,7),
+    buttonRightStick = new JoystickButton(m_driverController,10),
+    buttonLeftStick = new JoystickButton(m_driverController,9),
+    buttonStart = new JoystickButton(m_driverController,8);
+  public POVButton buttonDpadN = new POVButton(m_driverController, 0, 0),
+    buttonDpadE = new POVButton(m_driverController, 90, 0),
+    buttonDpadS = new POVButton(m_driverController, 180, 0),
+    buttonDpadW = new POVButton(m_driverController, 270, 0),
+    buttonDpadNE = new POVButton(m_driverController, 45, 0),
+    buttonDpadSE = new POVButton(m_driverController, 135, 0),
+    buttonDpadSW = new POVButton(m_driverController, 225, 0),
+    buttonDpadNW = new POVButton(m_driverController, 315, 0);
 
 
-
+    SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,6 +85,13 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
+  noteSubsystem.setDefaultCommand(
+    new RunCommand(
+      () -> noteSubsystem.triggerIntake(
+        m_driverController.getLeftTriggerAxis()-m_driverController.getRightTriggerAxis())));
+
+        m_chooser.setDefaultOption("Default (does nothing)", new InstantCommand());
 
 
 
@@ -89,11 +117,24 @@ public class RobotContainer {
     SmartDashboard.putData(m_robotDrive);
     SmartDashboard.putData("reset Gyro",zeroGyro);
     
+    //Raise lift, Lower Lift, Tilt Pizza Box, Kick Out, Shoot Out, Intake
+    buttonRightBumper.whileTrue(
+      new InstantCommand(noteSubsystem::manualRaiseLift))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopLift));
+
+    buttonLeftBumper.whileTrue(
+      new InstantCommand(noteSubsystem::manualLowerLift))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopLift));
+
+    buttonA.whileTrue(
+      new InstantCommand(noteSubsystem::manualKick))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopKick));
 
 
   }
-
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -139,4 +180,7 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
+
+
+
 }
