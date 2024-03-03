@@ -148,6 +148,7 @@ public final class Constants {
      
     public static final int kickerMotorID = 0;
     public static final int tiltMotorID = 1; 
-    
+    public static final int tiltEncoderID = 1;
+    public static final double tiltEncoderDistancePerRevolution = 2*Math.PI / 1024;
   }
 }

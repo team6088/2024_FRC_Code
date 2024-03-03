@@ -8,7 +8,12 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,13 +26,32 @@ public class NoteSubsystem extends SubsystemBase {
   private final Spark ShooterMotor = new Spark(NoteConstants.ShooterID);
   //private final Spark rightShooterMotor = new Spark(NoteConstants.ShooterID);  
   private final Spark kickerMotor = new Spark(NoteConstants.kickerMotorID);
-  private final Spark tiltMotor = new Spark(NoteConstants.tiltMotorID);
   private final DigitalInput bottomSwitch = new DigitalInput(NoteConstants.bottomSwitch);
+
 
 
   /** Creates a new NoteSubsystem. */
   public NoteSubsystem() {
     rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
+
+  }
+
+
+
+
+
+
+
+
+  public boolean lowerLimit (){
+    return bottomSwitch.get();
+  }
+
+  public void resetLiftHeight(){
+    if (this.lowerLimit()){
+    leftLiftMotor.setPosition(0);
+    rightLiftMotor.setPosition(0);
+    }
   }
 
   public void manualRaiseLift(){
@@ -35,7 +59,7 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void manualLowerLift(){
-    if (bottomSwitch.get()){
+    if (!this.lowerLimit()){
     leftLiftMotor.set(-.2);
     }
     else{
@@ -44,16 +68,10 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void holdLiftPosition(){
-    leftLiftMotor.setControl(new PositionDutyCycle(100));
+    leftLiftMotor.setControl(new PositionDutyCycle(0));
   }
 
-  public void manualTiltUp(){
-    tiltMotor.set(0.25);
-  }
 
-  public void manualTiltDown(){
-    tiltMotor.set(-.25);
-  }
 
   public void manualShoot(){
     ShooterMotor.set(1);
@@ -69,6 +87,7 @@ public class NoteSubsystem extends SubsystemBase {
     ShooterMotor.set(speed);
     //rightShooterMotor.set(-speed);
   }
+
 
   public void stopLift(){
     leftLiftMotor.set(0);
@@ -87,9 +106,7 @@ public class NoteSubsystem extends SubsystemBase {
     kickerMotor.set(1);
     }
   
-  public void stopTilter(){
-    tiltMotor.set(0);
-  }
+
   
   //public double getLiftPosition(){
  //    return rightLiftMotor.getPosition();///2048/4*.5;
@@ -105,5 +122,6 @@ public class NoteSubsystem extends SubsystemBase {
   SmartDashboard.putNumber("Left Lift Output", leftLiftMotor.get());  
   SmartDashboard.putNumber("Right Lift Output", rightLiftMotor.get());    
   SmartDashboard.putBoolean("Lower Switch Value", bottomSwitch.get());  
+
   }
 }

@@ -1,10 +1,20 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "DutyCycleEncoder[1]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/DriveSubsystem": "Subsystem",
       "/SmartDashboard/Scheduler": "Scheduler",
-      "/SmartDashboard/reset Gyro": "Command"
+      "/SmartDashboard/reset Gyro": "Command",
+      "/SmartDashboard/test Auto": "Command"
     }
   },
   "NetworkTables Info": {

@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.util.List;
 
+
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -30,8 +33,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.LowerLiftCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.NoteSubsystem;
+import frc.robot.subsystems.TilterProfiledPIDSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -43,6 +49,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final NoteSubsystem noteSubsystem = new NoteSubsystem();
+  public final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
+  private final TilterProfiledPIDSubsystem tilterSubsystem = new TilterProfiledPIDSubsystem();
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Trigger buttonA = new JoystickButton(m_driverController, 1),
@@ -107,10 +115,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+
 
     Command zeroGyro = new InstantCommand(m_robotDrive::zeroHeading);
     SmartDashboard.putData(CommandScheduler.getInstance());
@@ -125,10 +130,8 @@ public class RobotContainer {
       .whileFalse(
         new InstantCommand(noteSubsystem::stopLift));
 
-    buttonLeftBumper.whileTrue(
-      new InstantCommand(noteSubsystem::manualLowerLift))
-      .whileFalse(
-        new InstantCommand(noteSubsystem::stopLift));
+    buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+
 
     buttonA.whileTrue(
       new InstantCommand(noteSubsystem::manualKick))
@@ -136,16 +139,35 @@ public class RobotContainer {
         new InstantCommand(noteSubsystem::stopKick));
 
     buttonX.whileTrue(
-      new InstantCommand(noteSubsystem::manualTiltDown))
+      new InstantCommand(tilterSubsystem::manualTiltDown))
       .whileFalse(
-        new InstantCommand(noteSubsystem::stopTilter));
+        new InstantCommand(tilterSubsystem::stopTilter));
     
     buttonY.whileTrue(
-      new InstantCommand(noteSubsystem::manualTiltUp))
+      new InstantCommand(tilterSubsystem::manualTiltUp))
       .whileFalse(
-        new InstantCommand(noteSubsystem::stopTilter));
+        new InstantCommand(tilterSubsystem::stopTilter));
 
+    buttonB.whileTrue(
+      new InstantCommand(noteSubsystem::holdLiftPosition))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopLift));
+    
+
+    buttonStart.whileTrue(new RunCommand(
+      () -> m_robotDrive.setX(),
+      m_robotDrive));
+
+    buttonDpadN.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(2);
+      tilterSubsystem.enable();},
+      tilterSubsystem));
+  
+
+    buttonDpadS.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(.5);
+      tilterSubsystem.enable();},
+      tilterSubsystem));
   }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
