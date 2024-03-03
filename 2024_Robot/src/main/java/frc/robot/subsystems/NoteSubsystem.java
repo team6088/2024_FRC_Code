@@ -18,8 +18,8 @@ public class NoteSubsystem extends SubsystemBase {
 
   private final TalonFX leftLiftMotor = new TalonFX(NoteConstants.leftLiftMotorID);
   private final TalonFX rightLiftMotor = new TalonFX(NoteConstants.rightLiftMotorID);
-  private final Spark leftShooterMotor = new Spark(NoteConstants.leftShooterID);
-  private final Spark rightShooterMotor = new Spark(NoteConstants.rightShooterID);  
+  private final Spark ShooterMotor = new Spark(NoteConstants.ShooterID);
+  //private final Spark rightShooterMotor = new Spark(NoteConstants.ShooterID);  
   private final Spark kickerMotor = new Spark(NoteConstants.kickerMotorID);
   private final Spark tiltMotor = new Spark(NoteConstants.tiltMotorID);
   private final DigitalInput bottomSwitch = new DigitalInput(NoteConstants.bottomSwitch);
@@ -44,30 +44,30 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void holdLiftPosition(){
-    leftLiftMotor.setControl(new PositionDutyCycle(1000));
+    leftLiftMotor.setControl(new PositionDutyCycle(100));
   }
 
   public void manualTiltUp(){
-    tiltMotor.set(0.1);
+    tiltMotor.set(0.25);
   }
 
   public void manualTiltDown(){
-    tiltMotor.set(-.1);
+    tiltMotor.set(-.25);
   }
 
   public void manualShoot(){
-    leftShooterMotor.set(1);
-    rightShooterMotor.set(-1);
+    ShooterMotor.set(1);
+    //rightShooterMotor.set(-1);
   }
 
   public void manualIntake(){
-    leftShooterMotor.set(-1);
-    rightShooterMotor.set(1);
+    ShooterMotor.set(-1);
+    //rightShooterMotor.set(1);
   }
 
   public void triggerIntake(double speed){
-    leftShooterMotor.set(speed);
-    rightShooterMotor.set(-speed);
+    ShooterMotor.set(speed);
+    //rightShooterMotor.set(-speed);
   }
 
   public void stopLift(){
@@ -79,13 +79,17 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void stopShooter(){
-    leftShooterMotor.set(0);
-    rightShooterMotor.set(0);
+    ShooterMotor.set(0);
+    //rightShooterMotor.set(0);
   }
 
     public void manualKick(){
     kickerMotor.set(1);
     }
+  
+  public void stopTilter(){
+    tiltMotor.set(0);
+  }
   
   //public double getLiftPosition(){
  //    return rightLiftMotor.getPosition();///2048/4*.5;

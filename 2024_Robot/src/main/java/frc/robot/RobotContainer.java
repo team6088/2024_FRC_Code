@@ -89,10 +89,10 @@ public class RobotContainer {
   noteSubsystem.setDefaultCommand(
     new RunCommand(
       () -> noteSubsystem.triggerIntake(
-        m_driverController.getLeftTriggerAxis()-m_driverController.getRightTriggerAxis())));
+        m_driverController.getLeftTriggerAxis()-m_driverController.getRightTriggerAxis()),noteSubsystem));
 
         m_chooser.setDefaultOption("Default (does nothing)", new InstantCommand());
-
+        m_chooser.addOption("Test", getAutonomousCommand());
 
 
   }
@@ -116,7 +116,9 @@ public class RobotContainer {
     SmartDashboard.putData(CommandScheduler.getInstance());
     SmartDashboard.putData(m_robotDrive);
     SmartDashboard.putData("reset Gyro",zeroGyro);
-    
+    SmartDashboard.putData("test Auto",getAutonomousCommand());
+
+
     //Raise lift, Lower Lift, Tilt Pizza Box, Kick Out, Shoot Out, Intake
     buttonRightBumper.whileTrue(
       new InstantCommand(noteSubsystem::manualRaiseLift))
@@ -133,6 +135,15 @@ public class RobotContainer {
       .whileFalse(
         new InstantCommand(noteSubsystem::stopKick));
 
+    buttonX.whileTrue(
+      new InstantCommand(noteSubsystem::manualTiltDown))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopTilter));
+    
+    buttonY.whileTrue(
+      new InstantCommand(noteSubsystem::manualTiltUp))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopTilter));
 
   }
   /**
@@ -181,6 +192,5 @@ public class RobotContainer {
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
 
-
-
+ 
 }

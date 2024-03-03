@@ -15,10 +15,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.ADIS16448_IMU.CalibrationTime;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -43,7 +45,9 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
+
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+
   
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -68,7 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-
+    m_gyro.configCalTime(edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime._8s);
   }
 
   @Override
@@ -86,6 +90,8 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("gyro", -m_gyro.getAngle(IMUAxis.kX));
         SmartDashboard.putString("front left state", m_frontLeft.toString());
         SmartDashboard.putData(m_gyro);
+        SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     
   }
 
@@ -231,6 +237,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void zeroHeading() {
     m_gyro.reset();
   }
+
+ 
 
   public void calibrateGyro(){
     m_gyro.calibrate();
