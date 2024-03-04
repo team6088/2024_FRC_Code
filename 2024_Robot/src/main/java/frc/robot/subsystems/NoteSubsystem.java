@@ -33,13 +33,10 @@ public class NoteSubsystem extends SubsystemBase {
   /** Creates a new NoteSubsystem. */
   public NoteSubsystem() {
     rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
+    //leftLiftMotor.setPosition(0);
+    //rightLiftMotor.setPosition(0);
 
   }
-
-
-
-
-
 
 
 
@@ -59,11 +56,14 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void manualLowerLift(){
-    if (!this.lowerLimit()){
+    if (this.lowerLimit()){
     leftLiftMotor.set(-.2);
+
     }
-    else{
+    else {
       leftLiftMotor.set(0);
+      leftLiftMotor.setPosition(0);
+      rightLiftMotor.setPosition(0);
     }
   }
 
@@ -105,7 +105,14 @@ public class NoteSubsystem extends SubsystemBase {
     public void manualKick(){
     kickerMotor.set(1);
     }
-  
+    
+     public double leftLiftPostion(){
+      return leftLiftMotor.getPosition().getValueAsDouble()/4*0.5;
+    }
+
+    public double rightLiftPosition(){
+  return rightLiftMotor.getPosition().getValueAsDouble()/4*0.5;
+} 
 
   
   //public double getLiftPosition(){
@@ -117,11 +124,11 @@ public class NoteSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  SmartDashboard.putNumber("Left Encoder", leftLiftMotor.getPosition().getValueAsDouble());
-  SmartDashboard.putNumber("Right Encoder", rightLiftMotor.getPosition().getValueAsDouble());
+  SmartDashboard.putNumber("Left Encoder", leftLiftPostion());
+  SmartDashboard.putNumber("Right Encoder", rightLiftPosition());
   SmartDashboard.putNumber("Left Lift Output", leftLiftMotor.get());  
   SmartDashboard.putNumber("Right Lift Output", rightLiftMotor.get());    
   SmartDashboard.putBoolean("Lower Switch Value", bottomSwitch.get());  
-
+  SmartDashboard.putNumber("lelft-right Lift",leftLiftPostion() - rightLiftPosition());
   }
 }

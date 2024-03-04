@@ -6,8 +6,6 @@ package frc.robot;
 
 import java.util.List;
 
-
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -17,7 +15,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +31,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LowerLiftCommand;
+import frc.robot.commands.Autos.AutoOne;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.NoteSubsystem;
@@ -51,6 +49,7 @@ public class RobotContainer {
   private final NoteSubsystem noteSubsystem = new NoteSubsystem();
   public final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem();
   private final TilterProfiledPIDSubsystem tilterSubsystem = new TilterProfiledPIDSubsystem();
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Trigger buttonA = new JoystickButton(m_driverController, 1),
@@ -101,7 +100,7 @@ public class RobotContainer {
 
         m_chooser.setDefaultOption("Default (does nothing)", new InstantCommand());
         m_chooser.addOption("Test", getAutonomousCommand());
-
+        m_chooser.addOption("Test Auto", new AutoOne(m_robotDrive,noteSubsystem,m_LimelightSubsystem));
 
   }
 
@@ -131,7 +130,7 @@ public class RobotContainer {
         new InstantCommand(noteSubsystem::stopLift));
 
     buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
-
+    //buttonLeftBumper.whileTrue(new InstantCommand(noteSubsystem::manualLowerLift)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
     buttonA.whileTrue(
       new InstantCommand(noteSubsystem::manualKick))

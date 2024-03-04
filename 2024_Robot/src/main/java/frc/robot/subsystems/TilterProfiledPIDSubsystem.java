@@ -66,7 +66,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-  SmartDashboard.putNumber("Tilt Angle", tiltEncoder.getAbsolutePosition());
+  SmartDashboard.putNumber("Tilt Angle", tiltEncoder.getDistance());
   }
 
 }
