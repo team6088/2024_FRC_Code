@@ -5,8 +5,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -23,6 +27,11 @@ public class NoteSubsystem extends SubsystemBase {
 
   private final TalonFX leftLiftMotor = new TalonFX(NoteConstants.leftLiftMotorID);
   private final TalonFX rightLiftMotor = new TalonFX(NoteConstants.rightLiftMotorID);
+  //private final CANSparkMax LeftShooterMotor = new CANSparkMax(NoteConstants.LeftShooterID,MotorType.kBrushless);
+  //private final CANSparkMax RighttShooterMotor = new CANSparkMax(NoteConstants.RightShooterID,MotorType.kBrushless);
+  //private final CANSparkMax TilterMotor = new CANSparkMax(NoteConstants.TilterMotorID);
+  
+  
   private final Spark ShooterMotor = new Spark(NoteConstants.ShooterID);
   //private final Spark rightShooterMotor = new Spark(NoteConstants.ShooterID);  
   private final Spark kickerMotor = new Spark(NoteConstants.kickerMotorID);
@@ -32,6 +41,8 @@ public class NoteSubsystem extends SubsystemBase {
 
   /** Creates a new NoteSubsystem. */
   public NoteSubsystem() {
+    rightLiftMotor.setNeutralMode(NeutralModeValue.Brake);
+    leftLiftMotor.setNeutralMode(NeutralModeValue.Brake);
     rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
     //leftLiftMotor.setPosition(0);
     //rightLiftMotor.setPosition(0);
@@ -52,12 +63,12 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void manualRaiseLift(){
-    leftLiftMotor.set(0.2);
+    leftLiftMotor.set(0.8);
   }
 
   public void manualLowerLift(){
     if (this.lowerLimit()){
-    leftLiftMotor.set(-.2);
+    leftLiftMotor.set(-.8);
 
     }
     else {
@@ -103,7 +114,7 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
     public void manualKick(){
-    kickerMotor.set(1);
+    kickerMotor.set(0.5);
     }
     
      public double leftLiftPostion(){

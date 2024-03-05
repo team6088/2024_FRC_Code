@@ -59,6 +59,12 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     tiltMotor.set(-.25);
   }
 
+
+
+  public void manualTilt(double speed){
+    tiltMotor.set(-speed*0.5);
+  }
+
   public void stopTilter(){
     tiltMotor.set(0);
   }

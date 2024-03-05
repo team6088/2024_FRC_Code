@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,6 +53,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Joystick logitechController = new Joystick(1);
   Trigger buttonA = new JoystickButton(m_driverController, 1),
     buttonB = new JoystickButton(m_driverController,2),
     buttonX = new JoystickButton(m_driverController,3),
@@ -102,6 +104,12 @@ public class RobotContainer {
         m_chooser.addOption("Test", getAutonomousCommand());
         m_chooser.addOption("Test Auto", new AutoOne(m_robotDrive,noteSubsystem,m_LimelightSubsystem));
 
+              
+    //run arm on logitech
+     tilterSubsystem.setDefaultCommand(
+      new RunCommand(() ->
+      tilterSubsystem.manualTilt(logitechController.getRawAxis(1)), tilterSubsystem)
+    );
   }
 
   /**
@@ -165,6 +173,14 @@ public class RobotContainer {
     buttonDpadS.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(.5);
       tilterSubsystem.enable();},
       tilterSubsystem));
+
+
+
+
+
+
+
+
   }
 
   /**
