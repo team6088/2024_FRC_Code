@@ -100,9 +100,9 @@ public class RobotContainer {
       () -> noteSubsystem.triggerIntake(
         m_driverController.getLeftTriggerAxis()-m_driverController.getRightTriggerAxis()),noteSubsystem));
 
-        m_chooser.setDefaultOption("Default (does nothing)", new InstantCommand());
-        m_chooser.addOption("Test", getAutonomousCommand());
-        m_chooser.addOption("Test Auto", new AutoOne(m_robotDrive,noteSubsystem,m_LimelightSubsystem));
+      m_chooser.setDefaultOption("Default (does nothing)", new InstantCommand());
+      //m_chooser.addOption("Test", getAutonomousCommand());
+      m_chooser.addOption("AutoOne Command", new AutoOne(m_robotDrive,noteSubsystem,m_LimelightSubsystem));
 
               
     //run arm on logitech
@@ -110,7 +110,10 @@ public class RobotContainer {
       new RunCommand(() ->
       tilterSubsystem.manualTilt(logitechController.getRawAxis(1)), tilterSubsystem)
     );
+
+      SmartDashboard.putData(m_chooser);
   }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
