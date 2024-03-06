@@ -67,12 +67,13 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void manualRaiseLift(){
-    leftLiftMotor.set(0.8);
+    leftLiftMotor.set(0.5);
+    rightLiftMotor.set(0.5);
   }
 
 public void manualLowerLeftLift(){
   if (this.lowerLeftLimit()){
-  leftLiftMotor.set(-.8);
+  leftLiftMotor.set(-.5);
 
   }
   else {
@@ -83,7 +84,7 @@ public void manualLowerLeftLift(){
 
   public void manualLowerRightLift(){
   if (this.lowerRightLimit()){
-  rightLiftMotor.set(-.8);
+  rightLiftMotor.set(-.5);
 
   }
   else {
@@ -93,17 +94,42 @@ public void manualLowerLeftLift(){
 }
 
 
+  public void manualLowerLift(){
+  if (this.lowerRightLimit()){
+  rightLiftMotor.set(-.5);
+
+  }
+  else {
+    rightLiftMotor.set(0);
+    rightLiftMotor.setPosition(0);
+  }
+
+    if (this.lowerLeftLimit()){
+  leftLiftMotor.set(-.5);
+
+  }
+  else {
+    leftLiftMotor.set(0);
+    leftLiftMotor.setPosition(0);
+  }
+}
+
 
   public void holdLiftPosition(){
     leftLiftMotor.setControl(new PositionDutyCycle(0));
   }
 
 
-
   public void manualShoot(){
     leftShooterMotor.set(1);
     rightShooterMotor.set(-1);
     //rightShooterMotor.set(-1);
+  }
+
+  public void ampShoot(){
+    leftShooterMotor.set(0.1);
+    rightShooterMotor.set(-.1);
+    kickerMotor.set(0.2);
   }
 
   public void manualIntake(){
@@ -159,8 +185,8 @@ public void manualLowerLeftLift(){
   SmartDashboard.putNumber("Right Encoder", rightLiftPosition());
   SmartDashboard.putNumber("Left Lift Output", leftLiftMotor.get());  
   SmartDashboard.putNumber("Right Lift Output", rightLiftMotor.get());    
-  SmartDashboard.putBoolean("Lower Switch Value", bottomLeftSwitch.get());  
-  SmartDashboard.putBoolean("Lower Switch Value", bottomRightSwitch.get());  
+  SmartDashboard.putBoolean("Lower Left Switch Value", bottomLeftSwitch.get());  
+  SmartDashboard.putBoolean("Lower Right Switch Value", bottomRightSwitch.get());  
   SmartDashboard.putNumber("lelft-right Lift",leftLiftPostion() - rightLiftPosition());
   }
 }

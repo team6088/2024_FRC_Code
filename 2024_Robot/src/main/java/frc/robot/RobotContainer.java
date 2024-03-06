@@ -142,7 +142,13 @@ public class RobotContainer {
       .whileFalse(
         new InstantCommand(noteSubsystem::stopLift));
 
-    buttonLeftBumper.whileTrue(new ParallelCommandGroup(new LowerLeftLiftCommand(noteSubsystem),new LowerRightLiftCommand(noteSubsystem))).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    buttonLeftBumper.whileTrue(
+      new InstantCommand(noteSubsystem::manualLowerLift))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopLift));
+        
+        
+    //buttonLeftBumper.whileTrue(new ParallelCommandGroup(new LowerLeftLiftCommand(noteSubsystem),new LowerRightLiftCommand(noteSubsystem))).whileFalse(new InstantCommand(noteSubsystem::stopLift));
     //buttonLeftBumper.whileTrue(new InstantCommand(noteSubsystem::manualLowerLift)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
     buttonA.whileTrue(
@@ -169,6 +175,11 @@ public class RobotContainer {
     buttonStart.whileTrue(new RunCommand(
       () -> m_robotDrive.setX(),
       m_robotDrive));
+
+    buttonBack.whileTrue(
+      new InstantCommand(noteSubsystem::ampShoot))
+      .whileFalse(
+        new InstantCommand(noteSubsystem::stopShooter));
 
     buttonDpadN.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(Math.PI/4);
       tilterSubsystem.enable();},
