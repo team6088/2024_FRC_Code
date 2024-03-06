@@ -4,20 +4,13 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,10 +25,12 @@ public class NoteSubsystem extends SubsystemBase {
   //private final CANSparkMax TilterMotor = new CANSparkMax(NoteConstants.TilterMotorID);
   
   
-  private final Spark ShooterMotor = new Spark(NoteConstants.ShooterID);
-  //private final Spark rightShooterMotor = new Spark(NoteConstants.ShooterID);  
+  //private final Spark ShooterMotor = new Spark(NoteConstants.ShooterID);
+  private final CANSparkMax rightShooterMotor = new CANSparkMax(NoteConstants.rightShooterID, MotorType.kBrushless);  
+  private final CANSparkMax leftShooterMotor = new CANSparkMax(NoteConstants.leftShooterID, MotorType.kBrushless); 
   private final Spark kickerMotor = new Spark(NoteConstants.kickerMotorID);
-  private final DigitalInput bottomSwitch = new DigitalInput(NoteConstants.bottomSwitch);
+  private final DigitalInput bottomLeftSwitch = new DigitalInput(NoteConstants.bottomLeftSwitch);
+  private final DigitalInput bottomRightSwitch = new DigitalInput(NoteConstants.bottomRightSwitch);
 
 
 
@@ -43,7 +38,7 @@ public class NoteSubsystem extends SubsystemBase {
   public NoteSubsystem() {
     rightLiftMotor.setNeutralMode(NeutralModeValue.Brake);
     leftLiftMotor.setNeutralMode(NeutralModeValue.Brake);
-    rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
+    //rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
     //leftLiftMotor.setPosition(0);
     //rightLiftMotor.setPosition(0);
 
@@ -51,13 +46,22 @@ public class NoteSubsystem extends SubsystemBase {
 
 
 
-  public boolean lowerLimit (){
-    return bottomSwitch.get();
+  public boolean lowerLeftLimit (){
+    return bottomLeftSwitch.get();
   }
 
-  public void resetLiftHeight(){
-    if (this.lowerLimit()){
+  public boolean lowerRightLimit (){
+    return bottomRightSwitch.get();
+  }
+
+  public void resetLeftLiftHeight(){
+    if (this.lowerLeftLimit()){
     leftLiftMotor.setPosition(0);
+    }
+  }
+  
+  public void resetRightLiftHeight(){
+    if (this.lowerRightLimit()){
     rightLiftMotor.setPosition(0);
     }
   }
@@ -66,17 +70,29 @@ public class NoteSubsystem extends SubsystemBase {
     leftLiftMotor.set(0.8);
   }
 
-  public void manualLowerLift(){
-    if (this.lowerLimit()){
-    leftLiftMotor.set(-.8);
+public void manualLowerLeftLift(){
+  if (this.lowerLeftLimit()){
+  leftLiftMotor.set(-.8);
 
-    }
-    else {
-      leftLiftMotor.set(0);
-      leftLiftMotor.setPosition(0);
-      rightLiftMotor.setPosition(0);
-    }
   }
+  else {
+    leftLiftMotor.set(0);
+    leftLiftMotor.setPosition(0);
+  }
+}
+
+  public void manualLowerRightLift(){
+  if (this.lowerRightLimit()){
+  rightLiftMotor.set(-.8);
+
+  }
+  else {
+    rightLiftMotor.set(0);
+    rightLiftMotor.setPosition(0);
+  }
+}
+
+
 
   public void holdLiftPosition(){
     leftLiftMotor.setControl(new PositionDutyCycle(0));
@@ -85,17 +101,20 @@ public class NoteSubsystem extends SubsystemBase {
 
 
   public void manualShoot(){
-    ShooterMotor.set(1);
+    leftShooterMotor.set(1);
+    rightShooterMotor.set(-1);
     //rightShooterMotor.set(-1);
   }
 
   public void manualIntake(){
-    ShooterMotor.set(-1);
+    leftShooterMotor.set(-1);
+    rightShooterMotor.set(1);
     //rightShooterMotor.set(1);
   }
 
   public void triggerIntake(double speed){
-    ShooterMotor.set(speed);
+    leftShooterMotor.set(speed);
+    rightShooterMotor.set(-speed);
     //rightShooterMotor.set(-speed);
   }
 
@@ -109,7 +128,8 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void stopShooter(){
-    ShooterMotor.set(0);
+    leftShooterMotor.set(0);
+    rightShooterMotor.set(0);
     //rightShooterMotor.set(0);
   }
 
@@ -139,7 +159,8 @@ public class NoteSubsystem extends SubsystemBase {
   SmartDashboard.putNumber("Right Encoder", rightLiftPosition());
   SmartDashboard.putNumber("Left Lift Output", leftLiftMotor.get());  
   SmartDashboard.putNumber("Right Lift Output", rightLiftMotor.get());    
-  SmartDashboard.putBoolean("Lower Switch Value", bottomSwitch.get());  
+  SmartDashboard.putBoolean("Lower Switch Value", bottomLeftSwitch.get());  
+  SmartDashboard.putBoolean("Lower Switch Value", bottomRightSwitch.get());  
   SmartDashboard.putNumber("lelft-right Lift",leftLiftPostion() - rightLiftPosition());
   }
 }

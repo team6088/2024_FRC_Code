@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -31,7 +32,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.LowerLiftCommand;
+import frc.robot.commands.LowerLeftLiftCommand;
+import frc.robot.commands.LowerRightLiftCommand;
 import frc.robot.commands.Autos.AutoOne;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -131,7 +133,7 @@ public class RobotContainer {
     SmartDashboard.putData(CommandScheduler.getInstance());
     SmartDashboard.putData(m_robotDrive);
     SmartDashboard.putData("reset Gyro",zeroGyro);
-    SmartDashboard.putData("test Auto",getAutonomousCommand());
+    //SmartDashboard.putData("test Auto",getAutonomousCommand());
 
 
     //Raise lift, Lower Lift, Tilt Pizza Box, Kick Out, Shoot Out, Intake
@@ -140,7 +142,7 @@ public class RobotContainer {
       .whileFalse(
         new InstantCommand(noteSubsystem::stopLift));
 
-    buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    buttonLeftBumper.whileTrue(new ParallelCommandGroup(new LowerLeftLiftCommand(noteSubsystem),new LowerRightLiftCommand(noteSubsystem))).whileFalse(new InstantCommand(noteSubsystem::stopLift));
     //buttonLeftBumper.whileTrue(new InstantCommand(noteSubsystem::manualLowerLift)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
     buttonA.whileTrue(
@@ -168,12 +170,12 @@ public class RobotContainer {
       () -> m_robotDrive.setX(),
       m_robotDrive));
 
-    buttonDpadN.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(2);
+    buttonDpadN.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(Math.PI/4);
       tilterSubsystem.enable();},
       tilterSubsystem));
   
 
-    buttonDpadS.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(.5);
+    buttonDpadS.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(0);
       tilterSubsystem.enable();},
       tilterSubsystem));
 
@@ -191,7 +193,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+ /*  public Command getAutonomousCommand() {
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -231,6 +233,6 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
-
+ */
  
 }

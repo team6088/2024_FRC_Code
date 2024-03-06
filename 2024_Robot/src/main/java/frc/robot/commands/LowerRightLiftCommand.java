@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.NoteSubsystem;
 
-public class LowerLiftCommand extends Command {
+public class LowerRightLiftCommand extends Command {
 
 
   NoteSubsystem m_note;
@@ -15,7 +15,7 @@ public class LowerLiftCommand extends Command {
 
 
   /** Creates a new LowerLiftCommand. */
-  public LowerLiftCommand(NoteSubsystem note) {
+  public LowerRightLiftCommand(NoteSubsystem note) {
     m_note = note;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(note);
@@ -30,7 +30,7 @@ public class LowerLiftCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-        m_note.manualLowerLift();
+        m_note.manualLowerRightLift();
   }
 
   // Called once the command ends or is interrupted.
@@ -43,7 +43,7 @@ public class LowerLiftCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !m_note.lowerLimit();
+    return !m_note.lowerRightLimit();
     
   }
 }

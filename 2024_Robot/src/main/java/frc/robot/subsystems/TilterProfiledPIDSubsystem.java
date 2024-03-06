@@ -4,12 +4,14 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.Constants.NoteConstants;
@@ -18,20 +20,21 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   /** Creates a new TilterProfiledPIDSubsystem. */
 
 
-  private final Spark tiltMotor = new Spark(NoteConstants.tiltMotorID);
+  private final CANSparkMax tiltMotor = new CANSparkMax(NoteConstants.tiltMotorID, MotorType.kBrushless);
   private final DutyCycleEncoder tiltEncoder = new DutyCycleEncoder(NoteConstants.tiltEncoderID);
-  private final PIDController tiltPID = new PIDController(1, 0, 0);
   private final ArmFeedforward tiltFeedforward = new ArmFeedforward(1,1,.5,.1);
 
 
 
   public TilterProfiledPIDSubsystem() {
+
     super(new ProfiledPIDController(1,0,0,new TrapezoidProfile.Constraints(
                 3,
                 10),.02));
     tiltEncoder.setDistancePerRotation(NoteConstants.tiltEncoderDistancePerRevolution);  
         // The PIDController used by the subsystem
-    setGoal(0.5);
+    setGoal(Math.PI/4);
+    tiltMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
   }
 
   @Override
@@ -44,7 +47,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
 
   @Override
   public double getMeasurement() {
-    return tiltEncoder.getDistance() + 0.5;
+    return tiltEncoder.getDistance();
   }
 
   public void resetTiltEncoder(){
