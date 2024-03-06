@@ -4,17 +4,7 @@
 
 package frc.robot;
 
-import java.util.List;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,17 +13,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.LowerLeftLiftCommand;
-import frc.robot.commands.LowerRightLiftCommand;
+import frc.robot.commands.LowerLiftCommand;
 import frc.robot.commands.Autos.AutoOne;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -141,15 +126,8 @@ public class RobotContainer {
       new InstantCommand(noteSubsystem::manualRaiseLift))
       .whileFalse(
         new InstantCommand(noteSubsystem::stopLift));
-
-    buttonLeftBumper.whileTrue(
-      new InstantCommand(noteSubsystem::manualLowerLift))
-      .whileFalse(
-        new InstantCommand(noteSubsystem::stopLift));
-        
-        
-    //buttonLeftBumper.whileTrue(new ParallelCommandGroup(new LowerLeftLiftCommand(noteSubsystem),new LowerRightLiftCommand(noteSubsystem))).whileFalse(new InstantCommand(noteSubsystem::stopLift));
-    //buttonLeftBumper.whileTrue(new InstantCommand(noteSubsystem::manualLowerLift)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+               
+    buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem,-.2)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
     buttonA.whileTrue(
       new InstantCommand(noteSubsystem::manualKick))

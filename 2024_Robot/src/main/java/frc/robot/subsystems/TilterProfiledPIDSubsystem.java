@@ -34,7 +34,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     tiltEncoder.setDistancePerRotation(NoteConstants.tiltEncoderDistancePerRevolution);  
         // The PIDController used by the subsystem
     setGoal(Math.PI/4);
-    tiltMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+    //tiltMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
   }
 
   @Override

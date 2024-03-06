@@ -54,6 +54,14 @@ public class NoteSubsystem extends SubsystemBase {
     return bottomRightSwitch.get();
   }
 
+  public boolean liftBottomedOut (){
+   if (!this.lowerLeftLimit() && !this.lowerRightLimit()) //if both switches are false (contacted) return true
+    return true; 
+    else 
+    return false;
+  }
+
+
   public void resetLeftLiftHeight(){
     if (this.lowerLeftLimit()){
     leftLiftMotor.setPosition(0);
@@ -87,31 +95,38 @@ public void manualLowerLeftLift(){
   rightLiftMotor.set(-.5);
 
   }
-  else {
+  else 
     rightLiftMotor.set(0);
     rightLiftMotor.setPosition(0);
-  }
+  
 }
 
 
-  public void manualLowerLift(){
-  if (this.lowerRightLimit()){
-  rightLiftMotor.set(-.5);
+  public void manualLowerLift(double liftSpeed){
+  if (this.lowerRightLimit() && this.lowerLeftLimit()){
+  rightLiftMotor.set(-liftSpeed);
+  leftLiftMotor.set(-liftSpeed);
 
-  }
-  else {
+    }
+    else if (this.lowerRightLimit() && !this.lowerLeftLimit()){
+      rightLiftMotor.set(-liftSpeed);
+      leftLiftMotor.set(0);
+      leftLiftMotor.setPosition(0);
+    }
+
+    else if (!this.lowerRightLimit() && this.lowerLeftLimit()){
     rightLiftMotor.set(0);
+    leftLiftMotor.set(-liftSpeed);
     rightLiftMotor.setPosition(0);
   }
 
-    if (this.lowerLeftLimit()){
-  leftLiftMotor.set(-.5);
-
-  }
-  else {
+    else {
+    rightLiftMotor.set(0);
     leftLiftMotor.set(0);
+    rightLiftMotor.setPosition(0);
     leftLiftMotor.setPosition(0);
   }
+
 }
 
 
