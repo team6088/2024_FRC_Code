@@ -30,7 +30,7 @@ import frc.robot.subsystems.NoteSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoOne extends SequentialCommandGroup {
   /** Creates a new AutoOne. */
-  public AutoOne(DriveSubsystem swerve, NoteSubsystem note, LimelightSubsystem vision) {
+  public AutoOne(DriveSubsystem swerve, NoteSubsystem note) {
 
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(

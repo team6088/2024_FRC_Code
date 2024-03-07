@@ -75,13 +75,13 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void manualRaiseLift(){
-    leftLiftMotor.set(0.5);
-    rightLiftMotor.set(0.5);
+    leftLiftMotor.set(.6);
+    rightLiftMotor.set(.6);
   }
 
 public void manualLowerLeftLift(){
   if (this.lowerLeftLimit()){
-  leftLiftMotor.set(-.5);
+  leftLiftMotor.set(-.1);
 
   }
   else {
@@ -92,7 +92,7 @@ public void manualLowerLeftLift(){
 
   public void manualLowerRightLift(){
   if (this.lowerRightLimit()){
-  rightLiftMotor.set(-.5);
+  rightLiftMotor.set(-.1);
 
   }
   else 
@@ -162,6 +162,7 @@ public void manualLowerLeftLift(){
 
   public void stopLift(){
     leftLiftMotor.set(0);
+    rightLiftMotor.set(0);
   }
 
   public void stopKick(){

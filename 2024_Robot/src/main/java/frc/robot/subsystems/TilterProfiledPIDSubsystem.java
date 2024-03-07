@@ -20,7 +20,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   /** Creates a new TilterProfiledPIDSubsystem. */
 
 
-  private final CANSparkMax tiltMotor = new CANSparkMax(NoteConstants.tiltMotorID, MotorType.kBrushless);
+  //private final CANSparkMax tiltMotor = new CANSparkMax(NoteConstants.tiltMotorID, MotorType.kBrushless);
   private final DutyCycleEncoder tiltEncoder = new DutyCycleEncoder(NoteConstants.tiltEncoderID);
   private final ArmFeedforward tiltFeedforward = new ArmFeedforward(1,1,.5,.1);
 
@@ -33,7 +33,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
                 10),.02));
     tiltEncoder.setDistancePerRotation(NoteConstants.tiltEncoderDistancePerRevolution);  
         // The PIDController used by the subsystem
-    setGoal(Math.PI/4);
+    //setGoal(Math.PI/4);
     //tiltMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
   }
 
@@ -42,7 +42,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     // Calculate the feedforward from the sepoint
     double feedforward = tiltFeedforward.calculate(setpoint.position, setpoint.velocity);
     // Add the feedforward to the PID output to get the motor output
-    tiltMotor.setVoltage(output + feedforward);
+    //tiltMotor.setVoltage(output + feedforward);
   }
 
   @Override
@@ -53,7 +53,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void resetTiltEncoder(){
     tiltEncoder.reset();
   }
-
+/* 
   public void manualTiltUp(){
     tiltMotor.set(0.25);
   }
@@ -70,7 +70,7 @@ public class TilterProfiledPIDSubsystem extends ProfiledPIDSubsystem {
 
   public void stopTilter(){
     tiltMotor.set(0);
-  }
+  } */
 
   @Override
   public void periodic() {
