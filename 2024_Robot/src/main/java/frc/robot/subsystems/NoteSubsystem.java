@@ -142,9 +142,9 @@ public void manualLowerLeftLift(){
   }
 
   public void ampShoot(){
-    leftShooterMotor.set(0.1);
-    rightShooterMotor.set(-.1);
-    kickerMotor.set(0.2);
+    leftShooterMotor.set(0.2);
+    rightShooterMotor.set(-.2);
+    kickerMotor.set(0.15);
   }
 
   public void manualIntake(){

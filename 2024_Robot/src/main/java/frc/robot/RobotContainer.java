@@ -65,6 +65,8 @@ public class RobotContainer {
     buttonRightStick = new JoystickButton(m_driverController,10),
     buttonLeftStick = new JoystickButton(m_driverController,9),
     buttonStart = new JoystickButton(m_driverController,8);
+   Trigger button7 = new JoystickButton(logitechController,7),
+    button8 = new JoystickButton(logitechController,8);
   public POVButton buttonDpadN = new POVButton(m_driverController, 0, 0),
     buttonDpadE = new POVButton(m_driverController, 90, 0),
     buttonDpadS = new POVButton(m_driverController, 180, 0),
@@ -144,6 +146,15 @@ public class RobotContainer {
         new InstantCommand(noteSubsystem::stopLift));
                
     buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+
+
+      button8.whileTrue(
+    new InstantCommand(noteSubsystem::manualRaiseLift))
+    .whileFalse(
+      new InstantCommand(noteSubsystem::stopLift));
+              
+  button7.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+
 
     buttonA.whileTrue(
       new InstantCommand(noteSubsystem::manualKick))
