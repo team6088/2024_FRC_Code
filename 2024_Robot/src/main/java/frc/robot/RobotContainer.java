@@ -32,6 +32,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LowerLiftCommand;
+import frc.robot.commands.RaiseLiftCommand;
 import frc.robot.commands.Autos.AutoOne;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -65,8 +66,8 @@ public class RobotContainer {
     buttonRightStick = new JoystickButton(m_driverController,10),
     buttonLeftStick = new JoystickButton(m_driverController,9),
     buttonStart = new JoystickButton(m_driverController,8);
-   Trigger button7 = new JoystickButton(logitechController,7),
-    button8 = new JoystickButton(logitechController,8);
+   Trigger button9 = new JoystickButton(logitechController,9),
+    button11 = new JoystickButton(logitechController,11);
   public POVButton buttonDpadN = new POVButton(m_driverController, 0, 0),
     buttonDpadE = new POVButton(m_driverController, 90, 0),
     buttonDpadS = new POVButton(m_driverController, 180, 0),
@@ -106,15 +107,14 @@ public class RobotContainer {
       m_chooser.setDefaultOption("Default (does nothing)", new InstantCommand());
       //m_chooser.addOption("Test", getAutonomousCommand());
       m_chooser.addOption("AutoOne Command", new AutoOne(m_robotDrive,noteSubsystem));
-      m_chooser.addOption("orig auto", getAutonomousCommand());
+      //m_chooser.addOption("orig auto", getAutonomousCommand());
       m_chooser.addOption("straight", autoStraightCommand());
 
               
     //run arm on logitech
      tilterSubsystem.setDefaultCommand(
       new RunCommand(() ->
-      tilterSubsystem.manualTilt(logitechController.getRawAxis(1)), tilterSubsystem)
-    );
+      tilterSubsystem.manualTilt(MathUtil.applyDeadband(logitechController.getRawAxis(1),.1)), tilterSubsystem));
 
       SmartDashboard.putData(m_chooser);
   }
@@ -132,6 +132,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
 
+
+    
     Command zeroGyro = new InstantCommand(m_robotDrive::zeroHeading);
     SmartDashboard.putData(CommandScheduler.getInstance());
     SmartDashboard.putData(m_robotDrive);
@@ -140,20 +142,14 @@ public class RobotContainer {
 
 
     //Raise lift, Lower Lift, Tilt Pizza Box, Kick Out, Shoot Out, Intake
-    buttonRightBumper.whileTrue(
-      new InstantCommand(noteSubsystem::manualRaiseLift))
-      .whileFalse(
-        new InstantCommand(noteSubsystem::stopLift));
+    buttonRightBumper.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
                
     buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
 
-      button8.whileTrue(
-    new InstantCommand(noteSubsystem::manualRaiseLift))
-    .whileFalse(
-      new InstantCommand(noteSubsystem::stopLift));
+      button9.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
               
-  button7.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+  button11.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
 
     buttonA.whileTrue(
@@ -161,15 +157,15 @@ public class RobotContainer {
       .whileFalse(
         new InstantCommand(noteSubsystem::stopKick));
 
-/*     buttonX.whileTrue(
-      new InstantCommand(tilterSubsystem::manualTiltDown))
+     buttonX.whileTrue(
+      new InstantCommand(noteSubsystem::manualRaiseLeft))
       .whileFalse(
-        new InstantCommand(tilterSubsystem::stopTilter));
+        new InstantCommand(noteSubsystem::stopLift));
     
     buttonY.whileTrue(
-      new InstantCommand(tilterSubsystem::manualTiltUp))
+      new InstantCommand(noteSubsystem::manualRaiseRight))
       .whileFalse(
-        new InstantCommand(tilterSubsystem::stopTilter)); */
+        new InstantCommand(noteSubsystem::stopLift)); 
 
     buttonB.whileTrue(
       new InstantCommand(noteSubsystem::holdLiftPosition))
@@ -219,7 +215,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
    public Command getAutonomousCommand() {
-    // Create config for trajectory
+    return m_chooser.getSelected();
+
+    /* // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -257,7 +255,7 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
-  }
+ */  }
  
    public Command autoStraightCommand() {
     // Create config for trajectory
@@ -272,9 +270,9 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
+        List.of(new Translation2d(3, 0), new Translation2d(3, 0)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
+        new Pose2d(2, 0, new Rotation2d(0)),
         config);
 
     var thetaController = new ProfiledPIDController(

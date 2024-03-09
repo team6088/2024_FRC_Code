@@ -147,7 +147,8 @@ public final class Constants {
     public static final int bottomRightSwitch = 1;
     public static final int leftShooterID = 16;
     public static final int rightShooterID = 17;
-     
+    public static final int upperSwitch = 2;
+
     public static final int kickerMotorID = 0;
     public static final int tiltMotorID = 15; 
     public static final int tiltEncoderID = 2;

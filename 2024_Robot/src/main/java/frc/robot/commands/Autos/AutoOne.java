@@ -45,9 +45,9 @@ public class AutoOne extends SequentialCommandGroup {
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
         //List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        List.of(new Translation2d(1, 0), new Translation2d(2, 0)), //will this drive straight?
+        List.of(new Translation2d(1, 0), new Translation2d(1.5, 0)), //will this drive straight?
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
+        new Pose2d(2, 0, new Rotation2d(0)),
         config);
 
     var thetaController = new ProfiledPIDController(
@@ -71,8 +71,8 @@ public class AutoOne extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      swerveControllerCommand,
-      new InstantCommand(() -> note.manualRaiseLift()));
+      swerveControllerCommand);
+      //new InstantCommand(() -> note.manualRaiseLift()));
 
   
 }

@@ -31,6 +31,7 @@ public class NoteSubsystem extends SubsystemBase {
   private final Spark kickerMotor = new Spark(NoteConstants.kickerMotorID);
   private final DigitalInput bottomLeftSwitch = new DigitalInput(NoteConstants.bottomLeftSwitch);
   private final DigitalInput bottomRightSwitch = new DigitalInput(NoteConstants.bottomRightSwitch);
+  private final DigitalInput upperSwitch = new DigitalInput(NoteConstants.upperSwitch);
 
 
 
@@ -61,6 +62,10 @@ public class NoteSubsystem extends SubsystemBase {
     return false;
   }
 
+  public boolean liftRaised (){
+    return upperSwitch.get();
+  }
+
 
   public void resetLeftLiftHeight(){
     if (this.lowerLeftLimit()){
@@ -74,10 +79,25 @@ public class NoteSubsystem extends SubsystemBase {
     }
   }
 
-  public void manualRaiseLift(){
-    leftLiftMotor.set(.6);
-    rightLiftMotor.set(.6);
+  public void manualRaiseLift(double speed){
+    if (this.liftRaised()){
+    leftLiftMotor.set(speed);
+    rightLiftMotor.set(speed);
   }
+  else {
+    leftLiftMotor.set(0);
+    rightLiftMotor.set(0);
+  }
+}
+
+  public void manualRaiseRight(){
+  rightLiftMotor.set(.1);
+}
+
+  public void manualRaiseLeft(){
+  leftLiftMotor.set(.1);
+
+}
 
 public void manualLowerLeftLift(){
   if (this.lowerLeftLimit()){
@@ -142,8 +162,8 @@ public void manualLowerLeftLift(){
   }
 
   public void ampShoot(){
-    leftShooterMotor.set(0.2);
-    rightShooterMotor.set(-.2);
+    leftShooterMotor.set(0.25);
+    rightShooterMotor.set(-.25);
     kickerMotor.set(0.15);
   }
 
