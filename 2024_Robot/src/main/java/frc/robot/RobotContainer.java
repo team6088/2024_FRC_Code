@@ -147,9 +147,9 @@ public class RobotContainer {
     buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
 
-      button9.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    button9.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
               
-  button11.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    button11.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
 
     buttonA.whileTrue(

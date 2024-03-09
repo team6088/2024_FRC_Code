@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.SPI;
@@ -46,7 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
 
-  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  private final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 
   
 
@@ -62,7 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(-m_gyro.getAngle(IMUAxis.kY)),
+      Rotation2d.fromDegrees(-m_gyro.getGyroAngleX()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -72,14 +73,14 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    m_gyro.configCalTime(edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime._8s);
+    m_gyro.configCalTime(edu.wpi.first.wpilibj.ADIS16448_IMU.CalibrationTime._8s);
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(-m_gyro.getAngle(IMUAxis.kY)),
+        Rotation2d.fromDegrees(-m_gyro.getGyroAngleX()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -87,7 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
-        SmartDashboard.putNumber("gyro", -m_gyro.getAngle(IMUAxis.kY));
+        SmartDashboard.putNumber("gyro", -m_gyro.getGyroAngleX());
         SmartDashboard.putString("front left state", m_frontLeft.toString());
         SmartDashboard.putData(m_gyro);
         SmartDashboard.putNumber("Robot Heading", getHeading());
@@ -111,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(-m_gyro.getAngle(IMUAxis.kY)),
+        Rotation2d.fromDegrees(-m_gyro.getGyroAngleX()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -191,7 +192,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-m_gyro.getAngle(IMUAxis.kY)))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-m_gyro.getGyroAngleX()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -250,7 +251,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(-m_gyro.getAngle(IMUAxis.kY)).getDegrees();
+    return Rotation2d.fromDegrees(-m_gyro.getGyroAngleX()).getDegrees();
   }
 
   /**
@@ -259,6 +260,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    return -m_gyro.getRate(IMUAxis.kY) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return -m_gyro.getGyroRateX() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 }
