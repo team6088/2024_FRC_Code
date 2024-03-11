@@ -40,8 +40,8 @@ public class NoteSubsystem extends SubsystemBase {
     rightLiftMotor.setNeutralMode(NeutralModeValue.Brake);
     leftLiftMotor.setNeutralMode(NeutralModeValue.Brake);
     //rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
-    leftLiftMotor.setPosition(0);
-    rightLiftMotor.setPosition(0);
+    //leftLiftMotor.setPosition(0);
+    //rightLiftMotor.setPosition(0);
 
   }
 
