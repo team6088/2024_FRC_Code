@@ -89,10 +89,8 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
         SmartDashboard.putNumber("gyro", -m_gyro.getGyroAngleX());
-        SmartDashboard.putString("front left state", m_frontLeft.toString());
-        SmartDashboard.putData(m_gyro);
+
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     
   }
 

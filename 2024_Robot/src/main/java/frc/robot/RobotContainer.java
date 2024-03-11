@@ -142,13 +142,18 @@ public class RobotContainer {
 
 
     //Raise lift, Lower Lift, Tilt Pizza Box, Kick Out, Shoot Out, Intake
-    buttonRightBumper.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    //buttonRightBumper.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
                
     buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    buttonRightBumper.whileTrue(new InstantCommand(noteSubsystem::raiseLift))
+    .whileFalse(new InstantCommand(noteSubsystem::stopLift));
+
+    //button9.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    
+    button9.whileTrue(new InstantCommand(noteSubsystem::raiseLift))
+    .whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
 
-    button9.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
-              
     button11.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
 

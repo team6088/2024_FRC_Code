@@ -90,6 +90,12 @@ public class NoteSubsystem extends SubsystemBase {
   }
 }
 
+  public void raiseLift(){
+    leftLiftMotor.set(.6);
+    rightLiftMotor.set(.6);
+  }
+
+
   public void manualRaiseRight(){
   rightLiftMotor.set(.1);
 }
