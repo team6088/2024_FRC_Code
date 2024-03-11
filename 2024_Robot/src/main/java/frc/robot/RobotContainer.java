@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -142,17 +143,14 @@ public class RobotContainer {
 
 
     //Raise lift, Lower Lift, Tilt Pizza Box, Kick Out, Shoot Out, Intake
-    //buttonRightBumper.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
-               
+    buttonRightBumper.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    //buttonRightBumper.whileTrue(new InstantCommand(noteSubsystem::raiseLift)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+
     buttonLeftBumper.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
-    buttonRightBumper.whileTrue(new InstantCommand(noteSubsystem::raiseLift))
-    .whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
-    //button9.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
-    
-    button9.whileTrue(new InstantCommand(noteSubsystem::raiseLift))
-    .whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
+    button9.whileTrue(new RaiseLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
+    //button9.whileTrue(new InstantCommand(noteSubsystem::raiseLift)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
     button11.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
@@ -194,7 +192,7 @@ public class RobotContainer {
     buttonBack.whileTrue(
       new InstantCommand(noteSubsystem::ampShoot))
       .whileFalse(
-        new InstantCommand(noteSubsystem::stopShooter));
+        new ParallelCommandGroup(new InstantCommand(noteSubsystem::stopShooter), new InstantCommand(noteSubsystem::stopKick)));
 
 /*     buttonDpadN.onTrue(Commands.runOnce(() -> {tilterSubsystem.setGoal(Math.PI/4);
       tilterSubsystem.enable();},

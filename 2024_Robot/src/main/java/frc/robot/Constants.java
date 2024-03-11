@@ -153,5 +153,6 @@ public final class Constants {
     public static final int tiltMotorID = 15; 
     public static final int tiltEncoderID = 2;
     public static final double tiltEncoderDistancePerRevolution = Math.PI*2;//radians
+    public static final double maxLiftHeight = 12; //Inches, TBD
   }
 }

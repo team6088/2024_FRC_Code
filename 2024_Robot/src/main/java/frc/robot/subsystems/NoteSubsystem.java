@@ -40,8 +40,8 @@ public class NoteSubsystem extends SubsystemBase {
     rightLiftMotor.setNeutralMode(NeutralModeValue.Brake);
     leftLiftMotor.setNeutralMode(NeutralModeValue.Brake);
     //rightLiftMotor.setControl(new Follower(leftLiftMotor.getDeviceID(),false));
-    //leftLiftMotor.setPosition(0);
-    //rightLiftMotor.setPosition(0);
+    leftLiftMotor.setPosition(0);
+    rightLiftMotor.setPosition(0);
 
   }
 
@@ -62,9 +62,11 @@ public class NoteSubsystem extends SubsystemBase {
     return false;
   }
 
-  public boolean liftRaised (){
-    return upperSwitch.get();
+  public boolean upperSwitchReached (){
+    return !upperSwitch.get();
   }
+
+
 
 
   public void resetLeftLiftHeight(){
@@ -80,14 +82,10 @@ public class NoteSubsystem extends SubsystemBase {
   }
 
   public void manualRaiseLift(double speed){
-    if (this.liftRaised()){
+    if (!upperEncoderLimit())
     leftLiftMotor.set(speed);
     rightLiftMotor.set(speed);
-  }
-  else {
-    leftLiftMotor.set(0);
-    rightLiftMotor.set(0);
-  }
+
 }
 
   public void raiseLift(){
@@ -213,6 +211,13 @@ public void manualLowerLeftLift(){
   return rightLiftMotor.getPosition().getValueAsDouble()/4*0.5;
 } 
 
+    public boolean upperEncoderLimit(){
+    if (leftLiftPostion()>NoteConstants.maxLiftHeight || rightLiftPosition()>NoteConstants.maxLiftHeight)
+      return true;
+      else
+      return false;
+    
+  }
   
   //public double getLiftPosition(){
  //    return rightLiftMotor.getPosition();///2048/4*.5;
