@@ -32,10 +32,13 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
           // Get the UsbCamera from CameraServer
           UsbCamera frontCamera = CameraServer.startAutomaticCapture(0);
+          UsbCamera backCamera = CameraServer.startAutomaticCapture(1);
           //UsbCamera backCamera = CameraServer.startAutomaticCapture(1);
            //Set the resolution
           frontCamera.setResolution(240, 180);
           frontCamera.setFPS(20);
+          backCamera.setResolution(240, 180);
+          backCamera.setFPS(20);
           //backCamera.setResolution(240, 180);
           //backCamera.setFPS(20);
   }
