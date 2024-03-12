@@ -40,10 +40,10 @@ public final class Constants {
     public static final double kWheelBase = Units.inchesToMeters(22.75);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2),//-/+
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),//-/-
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2),//+/+
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2));//+/-
+        new Translation2d(kWheelBase / 2, -kTrackWidth / 2),//-/+
+        new Translation2d(kWheelBase / 2, kTrackWidth / 2),//-/-
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),//+/+
+        new Translation2d(-kWheelBase / 2, kTrackWidth / 2));//+/-
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = 0;//-Math.PI / 2;
@@ -52,7 +52,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = 0; //Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 13;
+    public static final int kFrontLeftDrivingCanId = 3;
     public static final int kRearLeftDrivingCanId = 2;
     public static final int kFrontRightDrivingCanId = 4;
     public static final int kRearRightDrivingCanId = 1;
@@ -153,6 +153,6 @@ public final class Constants {
     public static final int tiltMotorID = 15; 
     public static final int tiltEncoderID = 2;
     public static final double tiltEncoderDistancePerRevolution = Math.PI*2;//radians
-    public static final double maxLiftHeight = 12; //Inches, TBD
+    public static final double maxLiftHeight = 32; //Inches, TBD
   }
 }

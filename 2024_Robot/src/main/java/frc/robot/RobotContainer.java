@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.BasicTiltControl;
 import frc.robot.commands.LowerLiftCommand;
 import frc.robot.commands.RaiseLiftCommand;
 import frc.robot.commands.Autos.AutoOne;
@@ -68,7 +69,8 @@ public class RobotContainer {
     buttonLeftStick = new JoystickButton(m_driverController,9),
     buttonStart = new JoystickButton(m_driverController,8);
    Trigger button9 = new JoystickButton(logitechController,9),
-    button11 = new JoystickButton(logitechController,11);
+    button11 = new JoystickButton(logitechController,11),
+    button10 = new JoystickButton(logitechController,10);
   public POVButton buttonDpadN = new POVButton(m_driverController, 0, 0),
     buttonDpadE = new POVButton(m_driverController, 90, 0),
     buttonDpadS = new POVButton(m_driverController, 180, 0),
@@ -96,7 +98,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
 
@@ -154,6 +156,7 @@ public class RobotContainer {
 
     button11.whileTrue(new LowerLiftCommand(noteSubsystem,.6)).whileFalse(new InstantCommand(noteSubsystem::stopLift));
 
+    button10.whileTrue(new BasicTiltControl(tilterSubsystem,.19)).whileFalse(new InstantCommand(tilterSubsystem::stopTilt));
 
     buttonA.whileTrue(
       new InstantCommand(noteSubsystem::manualKick))
