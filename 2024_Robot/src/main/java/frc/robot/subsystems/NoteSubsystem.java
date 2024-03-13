@@ -200,7 +200,7 @@ public void manualLowerLeftLift(){
   }
 
     public void manualKick(){
-    kickerMotor.set(0.5);
+    kickerMotor.set(1);
     }
     
      public double leftLiftPostion(){
