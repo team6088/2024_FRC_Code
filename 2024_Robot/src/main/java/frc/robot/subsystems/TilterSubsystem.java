@@ -42,16 +42,16 @@ private AbsoluteEncoder m_absoluteEncoder;
   }
 
   public boolean shootPositionReady(){
-    if (m_absoluteEncoder.getPosition() > .15 & m_absoluteEncoder.getPosition() < 0.18)
+    if (m_absoluteEncoder.getPosition() > .155 & m_absoluteEncoder.getPosition() < 0.17)
       return true;
       else
       return false;
   }
 
   public void basicTilt(double speed){
-    if (m_absoluteEncoder.getPosition() < .15 || m_absoluteEncoder.getPosition()>0.6)
+    if (m_absoluteEncoder.getPosition() < .155 || m_absoluteEncoder.getPosition()>0.6)
     tiltMotor.set(speed);
-    else if (m_absoluteEncoder.getPosition() > 0.18)
+    else if (m_absoluteEncoder.getPosition() > 0.17)
     tiltMotor.set(-speed);
   }
 

@@ -36,6 +36,7 @@ import frc.robot.commands.BasicTiltControl;
 import frc.robot.commands.LowerLiftCommand;
 import frc.robot.commands.RaiseLiftCommand;
 import frc.robot.commands.Autos.AutoOne;
+import frc.robot.commands.Autos.AutoTwo;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.NoteSubsystem;
@@ -112,12 +113,13 @@ public class RobotContainer {
       m_chooser.addOption("AutoOne Command", new AutoOne(m_robotDrive,noteSubsystem));
       //m_chooser.addOption("orig auto", getAutonomousCommand());
       m_chooser.addOption("straight", autoStraightCommand());
+      m_chooser.addOption("autoTwo Command", new AutoTwo(m_robotDrive, noteSubsystem, tilterSubsystem));
 
               
     //run arm on logitech
      tilterSubsystem.setDefaultCommand(
       new RunCommand(() ->
-      tilterSubsystem.manualTilt(MathUtil.applyDeadband(logitechController.getRawAxis(1),.1)), tilterSubsystem));
+      tilterSubsystem.manualTilt(MathUtil.applyDeadband(logitechController.getRawAxis(1),.12)), tilterSubsystem));
 
       SmartDashboard.putData(m_chooser);
   }
